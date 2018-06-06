@@ -1,9 +1,10 @@
 from sklearn.cluster import KMeans
 import pandas as pd
-import matplotlib.pyplot as plt
+
+from plot_generator import PlotGenerator
 
 
-class MyClass:
+class ClusteringModel:
     numerical_values = ['Life Ladder', 'Log GDP per capita', 'Social support',
                         'Healthy life expectancy at birth',
                         'Freedom to make life choices', 'Generosity', 'Perceptions of corruption', 'Positive affect',
@@ -11,9 +12,7 @@ class MyClass:
                         'Confidence in national government', 'Democratic Quality', 'Delivery Quality',
                         'Standard deviation of ladder by country-year', 'Standard deviation of ladder by country-year']
 
-    def __init__(self, data_path, n_clusters, n_init):
-        self.n_clusters = n_clusters
-        self.n_init = n_init
+    def __init__(self, data_path):
         self.data_frame = pd.read_excel(data_path)
 
     def preprocess(self):
@@ -33,8 +32,8 @@ class MyClass:
         print self.data_frame
 
 
-    def k_means(self):
-        kmeans = KMeans(n_clusters=self.n_clusters, random_state=self.n_init)
+    def k_means(self, n_clusters, num_of_runs):
+        kmeans = KMeans(n_clusters=n_clusters, random_state=num_of_runs)
         kmeans.fit(self.data_frame)
         kmeans_results = kmeans.predict(self.data_frame)
         self.countries['Social support'] = self.data_frame['Social support'].values
@@ -45,6 +44,11 @@ class MyClass:
 
 
 
-my = MyClass('data.xlsx', 5, 5)
-my.preprocess()
-my.k_means()
+# my = ClusteringModel('data.xlsx')
+# my.preprocess()
+# df_results = my.k_means(5, 5)
+# PlotGenerator().generate_scatter_plot_image(df_results)
+# PlotGenerator().generate_choromap_image(df_results)
+
+
+

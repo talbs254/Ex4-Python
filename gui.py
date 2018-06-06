@@ -1,17 +1,16 @@
+import os.path
 from tkFileDialog import askopenfilename
 
 from tkinter import *
 from tkinter import messagebox
-import plotly.plotly as py
+from clustering_model import ClusteringModel
+from plot_generator import PlotGenerator
 from PIL import ImageTk, Image
-import os.path
-
-
-# packages:
-# pip install image
+# pip install pillow (for images need latest verision)
 
 class View():
     def __init__(self):
+        self.model = None
         self.root = Tk()
         self.root.title("K Mean Clustering by: Tal and Maor")
         self.data_path_entry = Entry(self.root)
@@ -50,6 +49,9 @@ class View():
             self.pop_alert("data file was not found")
         else:
             self.pop_alert("preprocess now")
+            self.model = ClusteringModel(data_path)
+            self.model.preprocess()
+            self.pop_alert("preprocess done!!!")
         pass
 
     def cluster_data(self):
@@ -60,13 +62,23 @@ class View():
 
         elif not runs_entry_get.isdigit() or int(runs_entry_get) <= 0:
             self.pop_alert("'Num of runs' field must be an Positive Integer")
+
+        elif self.model is None:
+            self.pop_alert("you need to preprocess the data")
         else:
             num_of_clusters = int(clusters_entry_get)
+            n_runs = int(runs_entry_get)
             self.pop_alert("cluster now")
-            self.choromap_img = ImageTk.PhotoImage(Image.open("newplot.png"))
+
+            cluster_result = self.model.k_means(num_of_clusters, n_runs)
+            plot_generator = PlotGenerator()
+            plot_generator.generate_scatter_plot_image(cluster_result)
+            plot_generator.generate_choromap_image(cluster_result)
+            self.choromap_img = ImageTk.PhotoImage(Image.open("map_plot.png"))
             self.choromap_img_lbl['image'] = self.choromap_img
-            self.scatter_img = ImageTk.PhotoImage(Image.open("life-expectancy-vs-gdp-per-capita.png"))
+            self.scatter_img = ImageTk.PhotoImage(Image.open("scatter_plot.png"))
             self.scatter_img_lbl['image'] = self.scatter_img
+            self.pop_alert("cluster done!!!")
 
     def pop_alert(self, msg):
         '''

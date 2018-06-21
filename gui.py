@@ -47,43 +47,48 @@ class View():
         Active preprocess logic
         """
         data_path = self.data_path_entry.get()
-        if not os.path.isfile(data_path):
-            self.pop_alert("data file was not found")
-        else:
-            self.pop_alert("preprocess now")
-            self.model = ClusteringModel(data_path)
-            self.model.preprocess()
-            self.pop_alert("preprocess done!!!")
-        pass
+        try:
+            if not os.path.isfile(data_path):
+                self.pop_alert("data file was not found")
+            else:
+                self.pop_alert("preprocess now")
+                self.model = ClusteringModel(data_path)
+                self.model.preprocess()
+                self.pop_alert("preprocess done!!!")
+        except Exception as e:
+            self.pop_alert("Data file is not correct or corrupted done!!!")
 
     def cluster_data(self):
         """
         Active k-mean clustering logic
         """
-        clusters_entry_get = self.num_of_clusters_entry.get()
-        runs_entry_get = self.num_of_runs_entry.get()
-        if not clusters_entry_get.isdigit() or int(clusters_entry_get) <= 0:
-            self.pop_alert("'Num of clusters k' field must be an Positive Integer")
+        try:
+            clusters_entry_get = self.num_of_clusters_entry.get()
+            runs_entry_get = self.num_of_runs_entry.get()
+            if not clusters_entry_get.isdigit() or int(clusters_entry_get) <= 0:
+                self.pop_alert("'Num of clusters k' field must be an Positive Integer")
 
-        elif not runs_entry_get.isdigit() or int(runs_entry_get) <= 0:
-            self.pop_alert("'Num of runs' field must be an Positive Integer")
+            elif not runs_entry_get.isdigit() or int(runs_entry_get) <= 0:
+                self.pop_alert("'Num of runs' field must be an Positive Integer")
 
-        elif self.model is None:
-            self.pop_alert("you need to preprocess the data")
-        else:
-            num_of_clusters = int(clusters_entry_get)
-            n_runs = int(runs_entry_get)
-            self.pop_alert("cluster now")
+            elif self.model is None:
+                self.pop_alert("you need to preprocess the data")
+            else:
+                num_of_clusters = int(clusters_entry_get)
+                n_runs = int(runs_entry_get)
+                self.pop_alert("cluster now")
 
-            cluster_result = self.model.k_means(num_of_clusters, n_runs)
-            plot_generator = PlotGenerator()
-            plot_generator.generate_scatter_plot_image(cluster_result)
-            plot_generator.generate_choromap_image(cluster_result)
-            self.choromap_img = ImageTk.PhotoImage(Image.open("map_plot.png"))
-            self.choromap_img_lbl['image'] = self.choromap_img
-            self.scatter_img = ImageTk.PhotoImage(Image.open("scatter_plot.png"))
-            self.scatter_img_lbl['image'] = self.scatter_img
-            self.pop_alert("cluster done!!!")
+                cluster_result = self.model.k_means(num_of_clusters, n_runs)
+                plot_generator = PlotGenerator()
+                plot_generator.generate_scatter_plot_image(cluster_result)
+                plot_generator.generate_choromap_image(cluster_result)
+                self.choromap_img = ImageTk.PhotoImage(Image.open("map_plot.png"))
+                self.choromap_img_lbl['image'] = self.choromap_img
+                self.scatter_img = ImageTk.PhotoImage(Image.open("scatter_plot.png"))
+                self.scatter_img_lbl['image'] = self.scatter_img
+                self.pop_alert("cluster done!!!")
+        except Exception as e:
+            self.pop_alert("Data file missing one of the following ( 'Country','Social support', 'Generosity')!!!")
 
     def pop_alert(self, msg):
         '''

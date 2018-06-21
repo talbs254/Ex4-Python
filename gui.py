@@ -1,12 +1,11 @@
 import os.path
 from tkFileDialog import askopenfilename
-
-from tkinter import *
-from tkinter import messagebox
+from Tkinter import *
+import tkMessageBox as messagebox
 from clustering_model import ClusteringModel
 from plot_generator import PlotGenerator
 from PIL import ImageTk, Image
-# pip install pillow (for images need latest verision)
+# python -m pip install --upgrade pillow (for images need latest verision)
 
 class View():
     def __init__(self):
@@ -44,6 +43,9 @@ class View():
         self.root.mainloop()
 
     def preprocess_data(self):
+        """
+        Active preprocess logic
+        """
         data_path = self.data_path_entry.get()
         if not os.path.isfile(data_path):
             self.pop_alert("data file was not found")
@@ -55,6 +57,9 @@ class View():
         pass
 
     def cluster_data(self):
+        """
+        Active k-mean clustering logic
+        """
         clusters_entry_get = self.num_of_clusters_entry.get()
         runs_entry_get = self.num_of_runs_entry.get()
         if not clusters_entry_get.isdigit() or int(clusters_entry_get) <= 0:
@@ -95,5 +100,6 @@ class View():
         self.data_path_entry.insert(0, dir_path)
 
 
+# Run the application
 v = View()
 v.start()

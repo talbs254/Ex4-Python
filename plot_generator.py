@@ -8,9 +8,17 @@ import matplotlib.pyplot as plt
 
 class PlotGenerator():
     def __init__(self):
+        '''
+        Activating plotly account
+        '''
         py.sign_in("maor309", "FSzzbXNMhAZwI4B6ApPt")
 
     def generate_choromap_image(self, df):
+        '''
+        Generate choromap image (the world map)
+        :param df: DataFrame containing countries names for graph
+        :return:
+        '''
         data = [dict(
             type='choropleth',
             locations=[x[0:3].upper() for x in df['country']],
@@ -47,6 +55,10 @@ class PlotGenerator():
         py.image.save_as(fig, filename="map_plot.png")
 
     def generate_scatter_plot_image(self, df):
+        '''
+        Generate scatter plot graph image
+        :param df: DataFrame containing ('Generosity', 'Social support','Cluster') for graph
+        '''
         x = df['Generosity']
         y = df['Social support']
         colors = df['Cluster']

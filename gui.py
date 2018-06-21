@@ -35,6 +35,7 @@ class View():
         self.choromap_img_lbl.grid(row=5, column=1)
         self.scatter_img_lbl = Label(self.root)
         self.scatter_img_lbl.grid(row=5, column=2)
+        self.working_dir_path = ""
 
     def start(self):
         '''
@@ -46,13 +47,14 @@ class View():
         """
         Active preprocess logic
         """
-        data_path = self.data_path_entry.get()
+        data_file_path = self.data_path_entry.get()
+        self.working_dir_path = os.path.dirname(os.path.abspath(data_file_path))
         try:
-            if not os.path.isfile(data_path):
+            if not os.path.isfile(data_file_path):
                 self.pop_alert("data file was not found")
             else:
                 self.pop_alert("preprocess now")
-                self.model = ClusteringModel(data_path)
+                self.model = ClusteringModel(data_file_path)
                 self.model.preprocess()
                 self.pop_alert("preprocess done!!!")
         except Exception as e:
@@ -79,7 +81,7 @@ class View():
                 self.pop_alert("cluster now")
 
                 cluster_result = self.model.k_means(num_of_clusters, n_runs)
-                plot_generator = PlotGenerator()
+                plot_generator = PlotGenerator(self.working_dir_path)
                 plot_generator.generate_scatter_plot_image(cluster_result)
                 plot_generator.generate_choromap_image(cluster_result)
                 self.choromap_img = ImageTk.PhotoImage(Image.open("map_plot.png"))

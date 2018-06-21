@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 
 
 class PlotGenerator():
-    def __init__(self):
+    def __init__(self, working_dir_path):
         '''
-        Activating plotly account
+        Activating plotly account and set working dir
         '''
         py.sign_in("maor309", "FSzzbXNMhAZwI4B6ApPt")
+        self.working_dir_path = working_dir_path
 
     def generate_choromap_image(self, df):
         '''
@@ -52,7 +53,7 @@ class PlotGenerator():
 
         fig = dict(data=data, layout=layout)
         # py.iplot( fig, validate=False, filename='d3-world-map' )
-        py.image.save_as(fig, filename="map_plot.png")
+        py.image.save_as(fig, filename=self.working_dir_path + "/map_plot.png")
 
     def generate_scatter_plot_image(self, df):
         '''
@@ -63,6 +64,4 @@ class PlotGenerator():
         y = df['Social support']
         colors = df['Cluster']
         plt.scatter(x, y, c=colors, s=60, alpha=0.5)
-        plt.savefig('scatter_plot.png')
-
-
+        plt.savefig(self.working_dir_path + '/scatter_plot.png')

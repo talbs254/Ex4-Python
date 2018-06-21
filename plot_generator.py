@@ -15,8 +15,8 @@ class PlotGenerator():
 
     def generate_choromap_image(self, df):
         '''
-        Generate choromap image (the world map)
-        :param df: DataFrame containing countries names for graph
+        Generate choromap image (the world map) as "map_plot.png"
+        :param df: DataFrame containing countries names and their clusters results for graph
         :return:
         '''
         data = [dict(
@@ -56,7 +56,7 @@ class PlotGenerator():
 
     def generate_scatter_plot_image(self, df):
         '''
-        Generate scatter plot graph image
+        Generate scatter plot graph image as "scatter_plot.png"
         :param df: DataFrame containing ('Generosity', 'Social support','Cluster') for graph
         '''
         x = df['Generosity']

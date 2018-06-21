@@ -60,7 +60,7 @@ class View():
 
     def cluster_data(self):
         """
-        Active k-mean clustering logic
+        Active k-mean clustering logic and represent graphs on gui using PlotGenerator class.
         """
         try:
             clusters_entry_get = self.num_of_clusters_entry.get()
@@ -92,13 +92,13 @@ class View():
 
     def pop_alert(self, msg):
         '''
-        display alert for upload file
+        display 'msg' alert
         '''
         messagebox.showinfo(title="K Mean Clustering", message=msg)
 
     def browse_data(self):
         '''
-        ask the query file directory
+        ask the query excel file
         '''
         dir_path = askopenfilename(filetypes=[("Xlsx files", "*.xlsx"), ("Csv files", "*.csv")])
         self.data_path_entry.delete(0, len(self.data_path_entry.get()))
